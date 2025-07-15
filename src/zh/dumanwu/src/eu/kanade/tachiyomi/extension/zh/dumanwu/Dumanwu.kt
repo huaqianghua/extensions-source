@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.zh.dumanwu
 
 import eu.kanade.tachiyomi.multisrc.mmlook.MMLook
+import eu.kanade.tachiyomi.source.model.MangasPage
 
 class Dumanwu : MMLook(
     "读漫屋",
