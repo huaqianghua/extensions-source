@@ -31,7 +31,7 @@ class Dumanwu : MMLook(
                     title = element.selectFirst(".mh-item-detali > h2")!!.text()
                     author = element.selectFirst(".mh-item-detali > p")!!.ownText()
                         .mustRemoveSurrounding("作者：", "")
-                    thumbnailUrl = element.selectFirst("img")!!.attr("src")  // 修正拼写
+                    thumbnailUrl = element.selectFirst("img")!!.attr("src")
                 }
             }
             return MangasPage(entries, entries.size == 24)
