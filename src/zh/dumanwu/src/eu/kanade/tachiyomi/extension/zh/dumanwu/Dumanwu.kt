@@ -12,8 +12,8 @@ import okhttp3.Response
 
 class Dumanwu : MMLook(
     "读漫屋",
-    "https://m.dumanwu1.com",
-    "https://www.dumanwu1.com",
+    "http://m.dumanwu1.com",
+    "http://www.dumanwu1.com",
     useLegacyMangaUrl = false,
 ) {
     override fun searchMangaRequest(page: Int, query: String, filters: FilterList): Request {
