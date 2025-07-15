@@ -53,40 +53,38 @@ jobs:
         run: |
           python ./.github/scripts/generate-build-matrices.py ${{ steps.last_successful_ci_commit.outputs.base }} Debug
 
-build:
-  name: Build extensions (${{ matrix.chunk.number }})
-  needs: prepare
-  runs-on: 'ubuntu-24.04'
-  if: ${{ toJson(fromJson(needs.prepare.outputs.matrix).chunk) != '[]' }}
-  strategy:
-    matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
-  steps:
-    - name: Checkout main branch
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  build:
+    name: Build extensions (${{ matrix.chunk.number }})
+    needs: prepare
+    runs-on: 'ubuntu-24.04'
+    if: ${{ toJson(fromJson(needs.prepare.outputs.matrix).chunk) != '[]' }}
+    strategy:
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-    - name: Set up Java
-      uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
-      with:
-        java-version: 17
-        distribution: temurin
+      - name: Set up Java
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          java-version: 17
+          distribution: temurin
 
-    - name: Set up Gradle
-      uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
-      with:
-        cache-read-only: ${{ matrix.chunk.number > 1 }}
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
+        with:
+          cache-read-only: ${{ matrix.chunk.number > 1 }}
 
-    - name: Build extensions (${{ matrix.chunk.number }})
-      run: |
-        ./gradlew $(echo '${{ toJson(matrix.chunk.modules) }}' | jq -r 'join(" ")')
+      - name: Build extensions (${{ matrix.chunk.number }})
+        run: |
+          ./gradlew $(echo '${{ toJson(matrix.chunk.modules) }}' | jq -r 'join(" ")')
 
-    - name: Upload APKs (${{ matrix.chunk.number }})
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-      with:
-        name: "individual-apks-${{ matrix.chunk.number }}"
-        path: "**/*.apk"
-        retention-days: 1
-      - name: Clean up CI files
-        run: rm signingkey.jks
+      - name: Upload APKs (${{ matrix.chunk.number }})
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: "individual-apks-${{ matrix.chunk.number }}"
+          path: "**/*.apk"
+          retention-days: 1
 
   save-apks:
     name: Save APKs to repository
@@ -97,19 +95,19 @@ build:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Download APK artifacts
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0 注: 修正了工具的版本号
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          path: ${{ github.workspace }}/apk-artifacts  # 使用工作目录以避免路径问题
+          path: ${{ github.workspace }}/apk-artifacts
 
       - name: Create apks folder and move files
         run: |
           mkdir -p apks
-          find ${{ github.workspace }}/apk-artifacts -name '*.apk" -exec mv {} apks/ \; || true 注: 处理可能的分块
+          find ${{ github.workspace }}/apk-artifacts -name '*.apk' -exec mv {} apks/ \; || true
 
       - name: Commit and push APKs
         run: |
           git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com" # 修正了 email
+          git config --global user.email "actions@github.com"
           git add apks/
           git commit -m "Add built APK files from workflow" || echo "No changes to commit"
           git push origin HEAD
