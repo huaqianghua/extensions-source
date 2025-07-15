@@ -11,7 +11,7 @@ import okhttp3.Request
 import okhttp3.Response
 
 class Dumanwu : MMLook(
-    "读漫屋",
+    "读漫屋d",
     "http://m.dumanwu1.com",
     "http://www.dumanwu1.com",
     useLegacyMangaUrl = false,
