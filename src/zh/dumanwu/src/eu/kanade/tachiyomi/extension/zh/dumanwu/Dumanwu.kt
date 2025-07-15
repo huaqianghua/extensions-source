@@ -1,7 +1,13 @@
 package eu.kanade.tachiyomi.extension.zh.dumanwu
 
 import eu.kanade.tachiyomi.multisrc.mmlook.MMLook
+import eu.kanade.tachiyomi.network.GET
+import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage
+import eu.kanade.tachiyomi.source.model.SManga
+import eu.kanade.tachiyomi.util.asJsoup
+import okhttp3.Request
+import okhttp3.Response
 
 class Dumanwu : MMLook(
     "读漫屋",
@@ -25,7 +31,7 @@ class Dumanwu : MMLook(
                     title = element.selectFirst(".mh-item-detali > h2")!!.text()
                     author = element.selectFirst(".mh-item-detali > p")!!.ownText()
                         .mustRemoveSurrounding("作者：", "")
-                    thumbnail_url = element.selectFirst("img")!!.attr("src")
+                    thumbnailUrl = element.selectFirst("img")!!.attr("src")  // 修正拼写
                 }
             }
             return MangasPage(entries, entries.size == 24)
