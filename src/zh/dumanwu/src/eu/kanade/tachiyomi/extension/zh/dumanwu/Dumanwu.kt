@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.extension.zh.dumanwu
 
 import eu.kanade.tachiyomi.multisrc.mmlook.MMLook
-import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage
