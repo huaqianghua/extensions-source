@@ -4,7 +4,7 @@ import eu.kanade.tachiyomi.multisrc.mmlook.MMLook
 import okhttp3.Headers
 
 class Dumanwu : MMLook(
-    "读漫屋",
+    "读漫屋2",
     "http://m.dumanwu1.com",
     "http://www.dumanwu1.com",
     useLegacyMangaUrl = false,
